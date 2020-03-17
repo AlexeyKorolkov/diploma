@@ -1,5 +1,4 @@
 import json
-import hashlib
 from hashlib import sha256
 from time import time
 from typing import Dict
@@ -16,6 +15,7 @@ class Blockchain(object):
             'index': len(self.chain) + 1,
             'timestamp': time(),
             'transactions': self.current_transactions,
+            'proof': proof,
             'prev_hash': prev_hash or self.hash(self.chain[-1])
         }
         self.current_transactions = []
@@ -35,7 +35,7 @@ class Blockchain(object):
     @staticmethod
     def hash(block):
         block_string = json.dumps(block, sort_keys=True).encode()
-        return hashlib.sha3_256(block_string).hexdigest()
+        return sha256(block_string).hexdigest()
 
     @property
     def last_block(self):
@@ -48,13 +48,7 @@ class Blockchain(object):
         return proof
 
     @staticmethod
-    def valid_proof(last_proof, proof):
-        pass
-
-
-if __name__ == '__main__':
-    x = 5
-    y = 0
-    while sha256(f"{x * y}".encode()).hexdigest()[-1] != '0':
-        y += 1
-    print(f'The solution is: y = {y}')
+    def valid_proof(last_proof, proof) -> bool:
+        guess = f'{last_proof}{proof}'.encode()
+        guess_hash = sha256(guess).hexdigest()
+        return guess_hash[:4] == '0000'
