@@ -1,5 +1,6 @@
 import json
 import hashlib
+from hashlib import sha256
 from time import time
 from typing import Dict
 
@@ -39,3 +40,21 @@ class Blockchain(object):
     @property
     def last_block(self):
         return self.chain[-1]
+
+    def proof_of_work(self, last_proof) -> int:
+        proof = 0
+        while self.valid_proof(last_proof, proof) is False:
+            proof += 1
+        return proof
+
+    @staticmethod
+    def valid_proof(last_proof, proof):
+        pass
+
+
+if __name__ == '__main__':
+    x = 5
+    y = 0
+    while sha256(f"{x * y}".encode()).hexdigest()[-1] != '0':
+        y += 1
+    print(f'The solution is: y = {y}')
