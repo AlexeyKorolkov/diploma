@@ -1,10 +1,7 @@
+'''
 from app import *
 from flask import jsonify, request
 
-
-@app.route('/')
-def hw():
-    return "hello world"
 
 
 @app.route('/mine', methods=['GET'])
@@ -40,9 +37,11 @@ def new_transaction():
     return jsonify(response), 201
 
 
+@app.route('/chain', methods=['GET'])
 def full_chain():
     response = {
         'chain': bc.chain,
         'length': len(bc.chain)
     }
     return jsonify(response), 200
+'''
